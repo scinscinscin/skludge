@@ -13,7 +13,7 @@ require("dotenv").config();
 AppDataSource.initialize()
 	.then(async () => {
 		const server = new Koa();
-		server.use(KoaCors({ credentials: true, origin: "http://localhost:3030" }));
+		server.use(KoaCors({ credentials: true, origin: "http://localhost:5173" }));
 		server.use(KoaBody());
 		server.use(KoaMorgan("common"));
 		server.use(responseTime);

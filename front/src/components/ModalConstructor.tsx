@@ -41,4 +41,5 @@ function ModalConstructor(args?: Partial<ConstructorArgs>) {
 	return { Modal, setIsOpen };
 }
 
+export type Modal = ReturnType<typeof ModalConstructor>;
 export default ModalConstructor;

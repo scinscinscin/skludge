@@ -3,22 +3,22 @@ import { v4 } from "uuid";
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+	@PrimaryGeneratedColumn()
+	id: number;
 
-  @Column({ unique: true })
-  username: string;
+	@Column({ unique: true })
+	username: string;
 
-  @Column()
-  hashedPassword: string;
+	@Column()
+	hashedPassword: string;
 
-  @Column({ unique: true })
-  uuid: string = v4();
+	@Column({ unique: true })
+	uuid: string = v4();
 
-  async cleanse() {
-    return {
-      username: this.username,
-      uuid: this.uuid,
-    };
-  }
+	async cleanse() {
+		return {
+			username: this.username,
+			uuid: this.uuid,
+		};
+	}
 }
