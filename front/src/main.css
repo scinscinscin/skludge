@@ -1,0 +1,117 @@
+@import url("https://fonts.googleapis.com/css2?family=Poor+Story&display=swap");
+
+:root {
+	--black: #0f0f0f;
+	--gray: #1c1c1c;
+	--white: #eae5e6;
+}
+
+* {
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+}
+
+body,
+input {
+	background-color: var(--black);
+}
+
+*,
+body,
+p,
+a,
+h1,
+h2,
+h3,
+h4,
+h5,
+label,
+textarea,
+input,
+button {
+	font-family: Arial, Helvetica, sans-serif;
+	color: var(--white);
+}
+
+.container {
+	max-width: 1300px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 30px;
+	padding-right: 30px;
+}
+
+header {
+	position: fixed;
+
+	top: 0;
+	left: 0;
+	width: 100vw;
+
+	padding-top: 10px;
+	padding-bottom: 5px;
+
+	background-color: var(--gray);
+	box-shadow: 0px 0px 8px 8px var(--gray);
+	font-size: 1.5em;
+}
+
+.space_between {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+header ul {
+	list-style-type: none;
+	display: flex;
+	justify-content: space-between;
+	gap: 20px;
+}
+
+main {
+	margin-top: 100px;
+	margin-bottom: 30px;
+}
+
+button {
+	font-size: 1em;
+	border: none;
+	padding: 5px 10px;
+}
+
+nav button {
+	background-color: rgba(0, 0, 0, 0);
+}
+
+nav button:hover {
+	color: white;
+	text-decoration: underline;
+}
+
+label {
+	display: block;
+	font-weight: bolder;
+}
+
+input {
+	margin-bottom: 20px;
+	padding: 5px 10px;
+	border-radius: 100px;
+	border: 3px solid gray;
+	font-size: 1.3em;
+	width: 100%;
+	max-width: 600px;
+}
+
+.login_form button {
+	background-color: #00ff73;
+	color: black;
+	font-weight: bold;
+	display: block;
+}
+
+.login_form {
+	margin-top: 20px;
+}

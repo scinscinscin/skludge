@@ -1,0 +1,30 @@
+.modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+
+	overflow: auto;
+	z-index: 1;
+	backdrop-filter: blur(20px);
+	/* background-color: rgba(15, 15, 15, 0.1); */
+	overscroll-behavior: none;
+}
+
+.internal_modal {
+	background-color: rgba(0, 0, 0, 0.8);
+	margin-top: 50px;
+	margin-bottom: 50px;
+
+	transform: translate(-50%);
+	margin-left: 50vw;
+
+	padding: 20px;
+	border-radius: 2px;
+	pointer-events: auto;
+
+	width: 100%;
+	max-width: 1300px;
+	min-height: 400px;
+}
