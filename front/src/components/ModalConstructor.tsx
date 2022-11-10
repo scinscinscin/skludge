@@ -19,6 +19,7 @@ const defaultArgs: ConstructorArgs = {
 function ModalConstructor(args?: Partial<ConstructorArgs>) {
 	args = { ...defaultArgs, ...args };
 	const [isOpen, setIsOpen] = React.useState(args.isActive);
+	const toggle = () => setIsOpen(!isOpen);
 
 	const Modal = (props: Props) => {
 		const style: React.CSSProperties = { display: isOpen ? "" : "none" };
@@ -38,7 +39,7 @@ function ModalConstructor(args?: Partial<ConstructorArgs>) {
 		);
 	};
 
-	return { Modal, setIsOpen };
+	return { Modal, setIsOpen, toggle };
 }
 
 export type Modal = ReturnType<typeof ModalConstructor>;

@@ -3,6 +3,7 @@
 :root {
 	--black: #0f0f0f;
 	--gray: #1c1c1c;
+	--light-gray: #2c2c2c;
 	--white: #eae5e6;
 }
 
@@ -42,7 +43,7 @@ button {
 	padding-right: 30px;
 }
 
-header {
+.header {
 	position: fixed;
 
 	top: 0;
@@ -54,7 +55,6 @@ header {
 
 	background-color: var(--gray);
 	box-shadow: 0px 0px 8px 8px var(--gray);
-	font-size: 1.5em;
 }
 
 .space_between {
@@ -71,7 +71,14 @@ main {
 button {
 	font-size: 1em;
 	border: none;
-	padding: 5px 10px;
+	background-color: var(--gray);
+	color: white;
+	cursor: pointer;
+	padding: 10px;
+}
+
+button:hover {
+	background-color: var(--light-gray);
 }
 
 nav button {
@@ -86,6 +93,7 @@ nav button:hover {
 label {
 	display: block;
 	font-weight: bolder;
+	font-size: 1.2em;
 }
 
 input {
@@ -98,13 +106,17 @@ input {
 	max-width: 600px;
 }
 
-.login_form button {
+.cool_button {
 	background-color: #00ff73;
 	color: black;
 	font-weight: bold;
 	display: block;
 }
 
-.login_form {
+.cool_button:hover {
+	background-color: #00ff73;
+}
+
+.internal_modal > form {
 	margin-top: 20px;
 }

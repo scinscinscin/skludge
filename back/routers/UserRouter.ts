@@ -9,7 +9,7 @@ import { loggedIn } from "../middleware/loggedIn";
 export const UserRouter = new Router();
 
 export const UserRepository = AppDataSource.getRepository(User);
-const hash = (s: string) => pbkdf2Sync(s, process.env.SALT, 10, 128).toString("utf-8");
+export const hash = (s: string) => pbkdf2Sync(s, process.env.SALT, 10, 128).toString("ascii");
 
 const userValidator = RT.Record({
 	username: RT.String,
@@ -24,7 +24,7 @@ UserRouter.post("/create", validateBody(userValidator), async (ctx) => {
 	user.hashedPassword = hash(body.password);
 	await AppDataSource.manager.save(user);
 
-	ctx.body = await user.cleanse();
+	ctx.body = user.cleanse();
 });
 
 UserRouter.post("/login", validateBody(userValidator), async (ctx) => {
@@ -37,7 +37,7 @@ UserRouter.post("/login", validateBody(userValidator), async (ctx) => {
 
 	const jwt_cookie = jwt.sign({ uuid: user.uuid }, process.env.JWT_SECRET);
 	ctx.cookies.set("jwt", jwt_cookie);
-	ctx.body = await user.cleanse();
+	ctx.body = user.cleanse();
 });
 
 UserRouter.post("/delete", async (ctx) => {
@@ -45,11 +45,11 @@ UserRouter.post("/delete", async (ctx) => {
 });
 
 UserRouter.get("/get", loggedIn(), async (ctx) => {
-	ctx.body = await ctx.state.user.cleanse();
+	ctx.body = ctx.state.user.cleanse();
 });
 
 UserRouter.get("/:uuid", async (ctx) => {
 	const user = await UserRepository.findOneBy({ uuid: ctx.params.uuid });
 	if (user == null) throw new Error("Was not able to find a user with that name");
-	ctx.body = await user.cleanse();
+	ctx.body = user.cleanse();
 });

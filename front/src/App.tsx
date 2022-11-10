@@ -2,13 +2,15 @@ import axios from "axios";
 import React from "react";
 import Header from "./components/Header";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Dashboard from "./pages/Dashboard";
 
 interface User {
 	username: string;
 	uuid: string;
 }
 
-type UseStateReturn<S> = [S, React.Dispatch<React.SetStateAction<S>>];
+export type UseStateReturn<S> = [S, React.Dispatch<React.SetStateAction<S>>];
 export const UserProvider = React.createContext<UseStateReturn<User | null>>(undefined as any);
 
 function App() {
@@ -19,7 +21,9 @@ function App() {
 		axios
 			.get("/user/get")
 			.then((res) => {
-				setUser(res.data);
+				if (res.data.success !== false) {
+					setUser(res.data);
+				}
 			})
 			.catch(() => {
 				setUser(null);
@@ -30,20 +34,20 @@ function App() {
 		<UserProvider.Provider value={[user, setUser]}>
 			<BrowserRouter>
 				<Header />
-				<Routes>
-					<Route path="/" element={<Home />} />
-				</Routes>
+
+				{/* Render everything inside the main container, but only render hidden pages when the user is logged in */}
+				<main className="container">
+					{user === null ? (
+						<Home />
+					) : (
+						<Routes>
+							<Route path="/" element={<Dashboard />} />
+						</Routes>
+					)}
+				</main>
 			</BrowserRouter>
 		</UserProvider.Provider>
 	);
 }
 
-function Home() {
-	return (
-		<main className="container">
-			<h1>...is a new org management system</h1>
-			<h1 style={{ textAlign: "center", marginTop: "50px" }}>Coming soon</h1>
-		</main>
-	);
-}
 export default App;

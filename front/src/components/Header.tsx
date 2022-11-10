@@ -1,16 +1,16 @@
 import React from "react";
 import { UserProvider } from "../App";
-import Login from "./Login";
-import ModalConstructor, { Modal } from "./ModalConstructor";
+import Login from "../pages/Login";
+import ModalConstructor from "./ModalConstructor";
 
 function Header() {
 	const [user, setUser] = React.useContext(UserProvider);
 	const LoginModal = ModalConstructor();
 
 	return (
-		<header>
+		<header className="header">
 			<div className="space_between container">
-				<h1>Skludge</h1>
+				<h2>Skludge</h2>
 				{user == null ? (
 					<div>
 						<LoginModal.Modal>
