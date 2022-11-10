@@ -4,7 +4,7 @@ import { UserProvider } from "../App";
 import Tasks, { Task } from "./Tasks";
 
 function Dashboard() {
-	const [user] = React.useContext(UserProvider);
+	// const [user] = React.useContext(UserProvider);
 	const [tasks, setTasks] = React.useState<Task[]>([]);
 
 	React.useEffect(() => {

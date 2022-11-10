@@ -64,7 +64,7 @@ button {
 }
 
 main {
-	margin-top: 100px;
+	margin-top: 70px;
 	margin-bottom: 30px;
 }
 
@@ -99,7 +99,7 @@ label {
 input {
 	margin-bottom: 20px;
 	padding: 5px 10px;
-	border-radius: 100px;
+	border-radius: 2px;
 	border: 3px solid gray;
 	font-size: 1em;
 	width: 100%;

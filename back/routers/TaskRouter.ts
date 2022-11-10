@@ -4,6 +4,7 @@ import { loggedIn } from "../middleware/loggedIn";
 import { validateBody } from "../middleware/validateBody";
 import { AppDataSource } from "../src/data-source";
 import { Task } from "../src/entity/Task";
+import { User } from "../src/entity/User";
 
 const TaskRepository = AppDataSource.getRepository(Task);
 export const TaskRouter = new Router();
@@ -40,5 +41,32 @@ TaskRouter.get("/authored", loggedIn(), async (ctx) => {
 			body: task.body,
 			uuid: task.uuid,
 		})),
+	};
+});
+
+const editTaskValidator = RT.Partial({
+	title: RT.String,
+	body: RT.String,
+});
+
+TaskRouter.patch("/edit/:uuid", loggedIn(), validateBody(editTaskValidator), async (ctx) => {
+	const uuid = ctx.params.uuid;
+	const { user, body }: { user: User; body: RT.Static<typeof editTaskValidator> } = ctx.state;
+
+	const task = await TaskRepository.findOne({
+		where: { uuid },
+		relations: { author: true },
+	});
+
+	if (task.author.uuid != user.uuid) throw new Error("Only the task author can change it's content");
+	if (body.body != null) task.body = body.body;
+	if (body.title != null) task.title = body.title;
+
+	await TaskRepository.save(task);
+
+	ctx.body = {
+		title: task.title,
+		body: task.body,
+		uuid: task.uuid,
 	};
 });
