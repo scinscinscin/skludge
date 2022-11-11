@@ -1,6 +1,6 @@
 import { AppDataSource } from "./data-source";
 import Koa from "koa";
-import Router from "@koa/router";
+import Router, { Middleware } from "@koa/router";
 import KoaCors from "@koa/cors";
 import KoaMorgan from "koa-morgan";
 import { koaBody as KoaBody } from "koa-body";
@@ -9,6 +9,7 @@ import { errorHandler } from "../middleware/errorHandler";
 import { responseTime } from "../middleware/responseTime";
 import { Permissions, User } from "./entity/User";
 import { TaskRouter } from "../routers/TaskRouter";
+import { loggedIn } from "../middleware/loggedIn";
 
 require("dotenv").config();
 
@@ -24,10 +25,12 @@ AppDataSource.initialize()
 		server.use(errorHandler);
 
 		const MainRouter = new Router();
-		const reg = (p: string, r: Router) => MainRouter.use(p, r.routes()).use(p, r.allowedMethods());
+		function register(path: string, router: Router, ...middleware: Middleware[]) {
+			MainRouter.use(path, ...middleware, router.routes()).use(path, ...middleware, router.allowedMethods());
+		}
 
-		reg("/user", UserRouter);
-		reg("/task", TaskRouter);
+		register("/user", UserRouter);
+		register("/task", TaskRouter, loggedIn());
 		server.use(MainRouter.routes()).use(MainRouter.allowedMethods());
 
 		server.listen(process.env.PORT ?? 11337, () => {

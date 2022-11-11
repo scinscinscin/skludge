@@ -1,15 +1,51 @@
-.tasksContainer {
-	margin-top: 30px;
+.tasks_container {
+	margin-top: 20px;
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: start;
-	gap: 20px;
+	gap: 15px;
 }
 
 .task {
-	flex: 0 1 100;
-	width: 200px;
-	background-color: var(--light-gray);
-	border-radius: 10px;
+	background-color: rgba(0, 0, 0, 0.2);
+	border-radius: 5px;
+	min-height: 200px;
+
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.card {
+	flex: 1 1 300px;
+	width: 300px;
+}
+
+.task header {
 	padding: 10px;
+	background-color: var(--dark);
+	margin-bottom: 10px;
+}
+
+.task section {
+	padding: 3px 10px 10px 10px;
+}
+
+.task:hover header .fa {
+	display: initial !important;
+}
+
+.fa {
+	cursor: pointer;
+}
+
+.task h2,
+.task p {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.task input,
+.task button {
+	background-color: rgba(0, 0, 0, 0.4);
 }

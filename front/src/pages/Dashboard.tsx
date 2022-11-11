@@ -1,10 +1,14 @@
 import axios from "axios";
 import React from "react";
-import { UserProvider } from "../App";
-import Tasks, { Task } from "./Tasks";
+import Tasks from "./Tasks";
+
+export interface Task {
+	title: string;
+	body: string;
+	uuid: string;
+}
 
 function Dashboard() {
-	// const [user] = React.useContext(UserProvider);
 	const [tasks, setTasks] = React.useState<Task[]>([]);
 
 	React.useEffect(() => {
@@ -13,15 +17,13 @@ function Dashboard() {
 			.then(({ data }) => {
 				setTasks(data.tasks);
 			})
-			.catch(() => {
-				console.log("Failed to reach tasks");
-			});
+			.catch();
 	}, []);
 
 	return (
-		<div>
+		<>
 			<Tasks tasks={tasks} setTasks={setTasks} />
-		</div>
+		</>
 	);
 }
 

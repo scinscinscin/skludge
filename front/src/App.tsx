@@ -3,9 +3,11 @@ import React from "react";
 import Header from "./components/Header";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
+import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import TaskRouter from "./routes/TaskRouter";
 
-interface User {
+export interface User {
 	username: string;
 	uuid: string;
 }
@@ -17,7 +19,35 @@ function App() {
 	const [user, setUser] = React.useState<User | null>(null);
 
 	// Check if the user is logged in
-	React.useEffect(() => {
+	React.useEffect(fetchUser(setUser), []);
+
+	return (
+		<UserProvider.Provider value={[user, setUser]}>
+			<BrowserRouter>
+				<Header />
+
+				<main className="container">
+					{user == null ? (
+						<Routes>
+							<Route path="/" element={<Home />} />
+							<Route path="/login" element={<Login />} />
+							<Route path="*" element={<h1>Not Found</h1>} />
+						</Routes>
+					) : (
+						<Routes>
+							<Route path="/task/*" element={TaskRouter}></Route>
+							<Route path="/" element={<Dashboard />} />
+							<Route path="*" element={<h1>Not Found (Internal)</h1>} />
+						</Routes>
+					)}
+				</main>
+			</BrowserRouter>
+		</UserProvider.Provider>
+	);
+}
+
+function fetchUser(setUser: (user: User | null) => void) {
+	return function () {
 		axios
 			.get("/user/get")
 			.then((res) => {
@@ -28,26 +58,7 @@ function App() {
 			.catch(() => {
 				setUser(null);
 			});
-	}, []);
-
-	return (
-		<UserProvider.Provider value={[user, setUser]}>
-			<BrowserRouter>
-				<Header />
-
-				{/* Render everything inside the main container, but only render hidden pages when the user is logged in */}
-				<main className="container">
-					{user === null ? (
-						<Home />
-					) : (
-						<Routes>
-							<Route path="/" element={<Dashboard />} />
-						</Routes>
-					)}
-				</main>
-			</BrowserRouter>
-		</UserProvider.Provider>
-	);
+	};
 }
 
 export default App;

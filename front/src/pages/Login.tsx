@@ -1,33 +1,37 @@
 import axios from "axios";
-import { useContext } from "react";
-import { useForm } from "react-hook-form";
+import React from "react";
+import { FieldValue, useForm } from "react-hook-form";
 import { UserProvider } from "../App";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+	const [_, setUser] = React.useContext(UserProvider);
+	const navigate = useNavigate();
+
 	const LoginForm = useForm();
-	const [user, setUser] = useContext(UserProvider);
+	function SubmitLogin(data: FieldValue<{ username: string; password: string }>) {
+		console.log(data);
+		axios
+			.post("/user/login", data)
+			.then(({ data }) => {
+				setUser(data);
+				navigate("/");
+			})
+			.catch();
+	}
 
 	return (
-		<form
-			className="login_form"
-			onSubmit={LoginForm.handleSubmit((data) => {
-				console.log(data);
-				axios.post("/user/login", data).then((res) => {
-					setUser(res.data);
-					console.log(res.data);
-				});
-			})}
-		>
-			<label>Username</label>
-			<input {...LoginForm.register("username", { required: true })} />
+		<>
+			<h1>Login</h1>
+			<form onSubmit={LoginForm.handleSubmit(SubmitLogin)}>
+				<label>Username</label>
+				<input {...LoginForm.register("username", { required: true })}></input>
 
-			<label>Password</label>
-			<input {...LoginForm.register("password", { required: true })} type="password" />
-
-			<button className="cool_button" type="submit">
-				Login
-			</button>
-		</form>
+				<label>Password</label>
+				<input {...LoginForm.register("password", { required: true })}></input>
+				<button type="submit">Login</button>
+			</form>
+		</>
 	);
 }
 

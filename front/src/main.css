@@ -1,9 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Poor+Story&display=swap");
 
 :root {
-	--black: #0f0f0f;
-	--gray: #1c1c1c;
-	--light-gray: #2c2c2c;
+	--dark: #202225;
+	--base: #2f3136;
+	--light: #36393f;
 	--white: #eae5e6;
 }
 
@@ -11,11 +11,6 @@
 	margin: 0px;
 	padding: 0px;
 	box-sizing: border-box;
-}
-
-body,
-input {
-	background-color: var(--black);
 }
 
 *,
@@ -39,8 +34,8 @@ button {
 	max-width: 1300px;
 	margin-left: auto;
 	margin-right: auto;
-	padding-left: 30px;
-	padding-right: 30px;
+	padding-left: 10px;
+	padding-right: 10px;
 }
 
 .header {
@@ -50,11 +45,12 @@ button {
 	left: 0;
 	width: 100vw;
 
-	padding-top: 10px;
-	padding-bottom: 5px;
+	padding: 10px 0px;
+	background-color: var(--dark);
+}
 
-	background-color: var(--gray);
-	box-shadow: 0px 0px 8px 8px var(--gray);
+body {
+	background-color: var(--base);
 }
 
 .space_between {
@@ -63,60 +59,54 @@ button {
 	align-items: center;
 }
 
+button {
+	padding: 5px 10px;
+	border: none;
+	background-color: rgba(0, 0, 0, 0);
+	color: white;
+	font-size: 1em;
+	background-color: var(--dark);
+
+	cursor: pointer;
+	padding: 10px 20px;
+	border-radius: 5px;
+}
+
+.link_button {
+	text-decoration: underline;
+	background-color: transparent;
+}
+
+.link_button:hover {
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
 main {
-	margin-top: 70px;
+	padding-top: 90px;
 	margin-bottom: 30px;
 }
 
-button {
-	font-size: 1em;
-	border: none;
-	background-color: var(--gray);
-	color: white;
-	cursor: pointer;
-	padding: 10px;
+main > form {
+	margin-top: 20px;
 }
 
-button:hover {
-	background-color: var(--light-gray);
+form > label {
+	font-size: 1.5em;
 }
 
-nav button {
-	background-color: rgba(0, 0, 0, 0);
-}
-
-nav button:hover {
-	color: white;
-	text-decoration: underline;
-}
-
-label {
+form > input {
 	display: block;
-	font-weight: bolder;
+	margin-top: 5px;
+	margin-bottom: 20px;
+	background-color: var(--dark);
+	border: none;
+	padding: 8px 10px;
+
+	width: 100%;
+	max-width: 500px;
 	font-size: 1.2em;
 }
 
-input {
-	margin-bottom: 20px;
-	padding: 5px 10px;
-	border-radius: 2px;
-	border: 3px solid gray;
-	font-size: 1em;
-	width: 100%;
-	max-width: 600px;
-}
-
-.cool_button {
-	background-color: #00ff73;
-	color: black;
-	font-weight: bold;
-	display: block;
-}
-
-.cool_button:hover {
-	background-color: #00ff73;
-}
-
-.internal_modal > form {
-	margin-top: 20px;
+.darker {
+	background-color: rgba(0, 0, 0, 0.4);
 }
