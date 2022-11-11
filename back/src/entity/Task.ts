@@ -18,4 +18,7 @@ export class Task {
 
 	@ManyToOne(() => User, (user) => user.authoredTasks)
 	author: User;
+
+	@Column()
+	finished: boolean = false;
 }

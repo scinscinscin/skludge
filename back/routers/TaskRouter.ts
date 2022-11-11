@@ -22,24 +22,18 @@ TaskRouter.post("/create", validateBody(taskValidator), async (ctx) => {
 	await TaskRepository.save(newTask);
 
 	ctx.body = {
+		...cleanseTask(newTask),
 		author: {
 			uuid: newTask.author.uuid,
 			username: newTask.author.username,
 		},
-		title: newTask.title,
-		body: newTask.body,
-		uuid: newTask.uuid,
 	};
 });
 
 TaskRouter.get("/authored", async (ctx) => {
 	const tasks = await TaskRepository.findBy({ author: { uuid: ctx.state.user.uuid } });
 	ctx.body = {
-		tasks: tasks.map((task) => ({
-			title: task.title,
-			body: task.body,
-			uuid: task.uuid,
-		})),
+		tasks: tasks.map(cleanseTask),
 	};
 });
 
@@ -53,9 +47,7 @@ TaskRouter.get("/:uuid", async (ctx) => {
 	if (task == null) throw new Error("Was not able to find a task with that name");
 
 	ctx.body = {
-		uuid: task.uuid,
-		title: task.title,
-		body: task.body,
+		...cleanseTask(task),
 		author: {
 			uuid: task.author.uuid,
 			username: task.author.username,
@@ -66,6 +58,7 @@ TaskRouter.get("/:uuid", async (ctx) => {
 const editTaskValidator = RT.Partial({
 	title: RT.String,
 	body: RT.String,
+	finished: RT.Boolean,
 });
 
 TaskRouter.patch("/edit/:uuid", validateBody(editTaskValidator), async (ctx) => {
@@ -80,14 +73,11 @@ TaskRouter.patch("/edit/:uuid", validateBody(editTaskValidator), async (ctx) => 
 	if (task.author.uuid != user.uuid) throw new Error("Only the task author can change it's content");
 	if (body.body != null) task.body = body.body;
 	if (body.title != null) task.title = body.title;
+	if (body.finished != null) task.finished = body.finished;
 
 	await TaskRepository.save(task);
 
-	ctx.body = {
-		title: task.title,
-		body: task.body,
-		uuid: task.uuid,
-	};
+	ctx.body = cleanseTask(task);
 });
 
 TaskRouter.delete("/delete/:uuid", async (ctx) => {
@@ -101,3 +91,12 @@ TaskRouter.delete("/delete/:uuid", async (ctx) => {
 
 	ctx.body = { success: true };
 });
+
+function cleanseTask(task: Task) {
+	return {
+		uuid: task.uuid,
+		title: task.title,
+		body: task.body,
+		finished: task.finished,
+	};
+}

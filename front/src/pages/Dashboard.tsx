@@ -6,6 +6,7 @@ export interface Task {
 	title: string;
 	body: string;
 	uuid: string;
+	finished: boolean;
 }
 
 function Dashboard() {
@@ -15,6 +16,7 @@ function Dashboard() {
 		axios
 			.get("/task/authored")
 			.then(({ data }) => {
+				console.log(data.tasks);
 				setTasks(data.tasks);
 			})
 			.catch();
