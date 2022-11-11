@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { FieldValue, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { Task } from "./Dashboard";
+import { useNavigate } from "react-router-dom";
 
 function TaskPage() {
 	let { uuid } = useParams();
@@ -10,6 +11,7 @@ function TaskPage() {
 	const [isEditing, setIsEditing] = useState(false);
 	const toggleEditForm = () => setIsEditing(!isEditing);
 	const EditForm = useForm({});
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		axios
@@ -41,6 +43,17 @@ function TaskPage() {
 			.catch();
 	}
 
+	function remove() {
+		axios
+			.delete(`/task/delete/${task?.uuid}`)
+			.then(({ data }) => {
+				if (data.success == true) {
+					navigate("/");
+				}
+			})
+			.catch();
+	}
+
 	if (task == null) return <h1>Loading...</h1>;
 
 	return (
@@ -61,7 +74,15 @@ function TaskPage() {
 						<label>Body</label>
 						<input {...EditForm.register("body", { required: true })} />
 
-						<button type="submit">Edit</button>
+						<div className="space_between">
+							<button type="submit" className="darker">
+								Edit
+							</button>
+
+							<button type="button" onClick={remove} className="bad_button">
+								Delete
+							</button>
+						</div>
 					</form>
 				) : (
 					<p>{task.body}</p>

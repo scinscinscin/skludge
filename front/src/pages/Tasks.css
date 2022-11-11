@@ -45,7 +45,6 @@
 	text-overflow: ellipsis;
 }
 
-.task input,
-.task button {
-	background-color: rgba(0, 0, 0, 0.4);
+.bad_button {
+	background-color: #b81515;
 }

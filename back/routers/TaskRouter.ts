@@ -98,4 +98,6 @@ TaskRouter.delete("/delete/:uuid", async (ctx) => {
 
 	if (task.author.uuid !== ctx.state.user.uuid) throw new Error("Only the task author can remove their own task");
 	await TaskRepository.remove(task);
+
+	ctx.body = { success: true };
 });
