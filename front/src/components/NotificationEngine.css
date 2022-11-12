@@ -1,0 +1,35 @@
+.notification_engine {
+	z-index: 3;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	overscroll-behavior: none;
+	pointer-events: none;
+}
+
+.notif_sidebar {
+	height: 100vh;
+	width: 280px;
+	pointer-events: all;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	gap: 10px;
+}
+
+.notif {
+	padding: 10px;
+	backdrop-filter: blur(20px);
+	border-radius: 5px;
+}
+
+.notif h1 {
+	font-size: 1.3em;
+}
+
+.notif section {
+	margin-top: 3px;
+}
