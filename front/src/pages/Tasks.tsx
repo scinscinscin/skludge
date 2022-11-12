@@ -1,6 +1,7 @@
 import axios from "axios";
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { NotifPrvider } from "../App";
 import { Task } from "./Dashboard";
 import "./Tasks.css";
 
@@ -11,13 +12,19 @@ interface Props {
 
 function Tasks(props: Props) {
 	const navigate = useNavigate();
+	const notifier = useContext(NotifPrvider);
 
 	function toggleFinished(task: Task) {
+		const startTime = Date.now();
+
 		axios
 			.patch("/task/edit/" + task.uuid, { finished: !task.finished })
 			.then(({ data }) => {
 				props.setTasks(props.tasks.map((t) => (t.uuid != task.uuid ? t : data)));
-				console.log(data);
+				notifier.notify({
+					title: (data as Task).finished ? "Marked as finished" : "Marked as unfinished",
+					body: `Request took ${Date.now() - startTime} ms`,
+				});
 			})
 			.catch();
 	}

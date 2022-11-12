@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import TaskRouter from "./routes/TaskRouter";
+import { NotificationEngine } from "./components/NotificationEngine";
 
 export interface User {
 	username: string;
@@ -14,8 +15,10 @@ export interface User {
 
 export type UseStateReturn<S> = [S, React.Dispatch<React.SetStateAction<S>>];
 export const UserProvider = React.createContext<UseStateReturn<User | null>>(undefined as any);
+export const NotifPrvider = React.createContext<NotificationEngine>(undefined as any);
 
 function App() {
+	const Notifier = NotificationEngine();
 	const [user, setUser] = React.useState<User | null>(null);
 
 	// Check if the user is logged in
@@ -23,25 +26,29 @@ function App() {
 
 	return (
 		<UserProvider.Provider value={[user, setUser]}>
-			<BrowserRouter>
-				<Header />
+			<NotifPrvider.Provider value={Notifier}>
+				<Notifier.Element />
 
-				<main className="container">
-					{user == null ? (
-						<Routes>
-							<Route path="/" element={<Home />} />
-							<Route path="/login" element={<Login />} />
-							<Route path="*" element={<h1>Not Found</h1>} />
-						</Routes>
-					) : (
-						<Routes>
-							<Route path="/task/*" element={TaskRouter}></Route>
-							<Route path="/" element={<Dashboard />} />
-							<Route path="*" element={<h1>Not Found (Internal)</h1>} />
-						</Routes>
-					)}
-				</main>
-			</BrowserRouter>
+				<BrowserRouter>
+					<Header />
+
+					<main className="container">
+						{user == null ? (
+							<Routes>
+								<Route path="/" element={<Home />} />
+								<Route path="/login" element={<Login />} />
+								<Route path="*" element={<h1>Not Found</h1>} />
+							</Routes>
+						) : (
+							<Routes>
+								<Route path="/task/*" element={TaskRouter}></Route>
+								<Route path="/" element={<Dashboard />} />
+								<Route path="*" element={<h1>Not Found (Internal)</h1>} />
+							</Routes>
+						)}
+					</main>
+				</BrowserRouter>
+			</NotifPrvider.Provider>
 		</UserProvider.Provider>
 	);
 }
