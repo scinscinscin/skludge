@@ -42,6 +42,7 @@ function Divisions({ state: [divisions, setDivisions] }: Props) {
 		axios.post("/division/create", formData).then(({ data }) => {
 			setDivisions([...divisions, data]);
 			toggle();
+			CreateForm.reset();
 		});
 	}
 
@@ -52,7 +53,11 @@ function Divisions({ state: [divisions, setDivisions] }: Props) {
 				{divisions.map((division, idx) => (
 					<div className="list-item" key={idx}>
 						<h3>{division.name}</h3>
-						<p>Members: {division.members.map((u) => u.username).join(", ")}</p>
+						{division.members.length > 0 ? (
+							<p>Members: {division.members.map((u) => u.username).join(", ")}</p>
+						) : (
+							<p>No members</p>
+						)}
 					</div>
 				))}
 			</div>
@@ -96,6 +101,8 @@ function Users({ state: [divisions, setDivisions] }: Props) {
 				setUsers([...users, user]);
 				setNewUser({ user, password });
 				setDivisions(divisions.map((d) => (d.uuid !== division.uuid ? d : division)));
+				toggle();
+				userCreateForm.reset();
 			})
 			.catch();
 	}
