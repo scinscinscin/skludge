@@ -4,12 +4,13 @@ import Router, { Middleware } from "@koa/router";
 import KoaCors from "@koa/cors";
 import KoaMorgan from "koa-morgan";
 import { koaBody as KoaBody } from "koa-body";
-import { hash, UserRepository, UserRouter } from "../routers/UserRouter";
-import { errorHandler } from "../middleware/errorHandler";
-import { responseTime } from "../middleware/responseTime";
-import { Permissions, User } from "./entity/User";
-import { TaskRouter } from "../routers/TaskRouter";
-import { loggedIn } from "../middleware/loggedIn";
+import { hash, UserRepository, UserRouter } from "./routers/UserRouter";
+import { TaskRouter } from "./routers/TaskRouter";
+import { DivisionRouter } from "./routers/DivisionRouter";
+import { errorHandler } from "./middleware/errorHandler";
+import { responseTime } from "./middleware/responseTime";
+import { loggedIn } from "./middleware/loggedIn";
+import { PERMISSION, User } from "./entity/User";
 
 require("dotenv").config();
 
@@ -31,6 +32,7 @@ AppDataSource.initialize()
 
 		register("/user", UserRouter);
 		register("/task", TaskRouter, loggedIn());
+		register("/division", DivisionRouter, loggedIn());
 		server.use(MainRouter.routes()).use(MainRouter.allowedMethods());
 
 		server.listen(process.env.PORT ?? 11337, () => {
@@ -44,7 +46,7 @@ async function initiializeDatabase() {
 	const user = new User();
 	user.username = process.env.ADMIN_USERNAME;
 	user.hashedPassword = hash(process.env.ADMIN_PASSWORD);
-	user.permissionLevel = Permissions.ADMIN;
+	user.permissionLevel = PERMISSION.ADMIN;
 
 	await AppDataSource.manager.save(user);
 }

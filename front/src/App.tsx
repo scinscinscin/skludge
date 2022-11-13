@@ -7,10 +7,16 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import TaskRouter from "./routes/TaskRouter";
 import { NotificationEngine } from "./components/NotificationEngine";
+import Manage from "./pages/Manage";
 
 export interface User {
+	permissionLevel: number;
 	username: string;
 	uuid: string;
+}
+
+export enum PERMISSION {
+	ROOT = 100,
 }
 
 export type UseStateReturn<S> = [S, React.Dispatch<React.SetStateAction<S>>];
@@ -22,7 +28,7 @@ function App() {
 	const [user, setUser] = React.useState<User | null>(null);
 
 	// Check if the user is logged in
-	React.useEffect(fetchUser(setUser), []);
+	React.useEffect(fetchUser(setUser, Notifier), []);
 
 	return (
 		<UserProvider.Provider value={[user, setUser]}>
@@ -32,7 +38,7 @@ function App() {
 				<BrowserRouter>
 					<Header />
 
-					<main className="container">
+					<main className="container main">
 						{user == null ? (
 							<Routes>
 								<Route path="/" element={<Home />} />
@@ -41,8 +47,8 @@ function App() {
 							</Routes>
 						) : (
 							<Routes>
-								<Route path="/task/*" element={TaskRouter}></Route>
-								<Route path="/" element={<Dashboard />} />
+								<Route path="/task/*" element={TaskRouter} />
+								<Route path="/" element={user.permissionLevel === PERMISSION.ROOT ? <Manage /> : <Dashboard />} />
 								<Route path="*" element={<h1>Not Found (Internal)</h1>} />
 							</Routes>
 						)}
@@ -53,10 +59,10 @@ function App() {
 	);
 }
 
-function fetchUser(setUser: (user: User | null) => void) {
+function fetchUser(setUser: (user: User | null) => void, notifier: NotificationEngine) {
 	return function () {
 		axios
-			.get("/user/get")
+			.get("/user/getCurrentUser")
 			.then((res) => {
 				if (res.data.success !== false) {
 					setUser(res.data);
@@ -64,6 +70,9 @@ function fetchUser(setUser: (user: User | null) => void) {
 			})
 			.catch(() => {
 				setUser(null);
+				notifier.notify({
+					title: "Failed to fetch login status from the API",
+				});
 			});
 	};
 }

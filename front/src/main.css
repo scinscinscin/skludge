@@ -81,20 +81,22 @@ button {
 	background-color: rgba(0, 0, 0, 0.4);
 }
 
-main {
+.main {
 	padding-top: 90px;
 	margin-bottom: 30px;
 }
 
-main > form {
+.main > form,
+section > form {
 	margin-top: 20px;
 }
 
 form > label {
-	font-size: 1.5em;
+	font-size: 1.2em;
 }
 
-form > input {
+form > input,
+form > select {
 	display: block;
 	margin-top: 5px;
 	margin-bottom: 20px;
@@ -109,4 +111,21 @@ form > input {
 
 .darker {
 	background-color: rgba(0, 0, 0, 0.4);
+}
+
+.mt_30 {
+	margin-top: 30px;
+}
+
+.list {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	margin-top: 10px;
+}
+
+.list-item {
+	background-color: rgba(0, 0, 0, 0.3);
+	border-radius: 5px;
+	padding: 10px 15px;
 }

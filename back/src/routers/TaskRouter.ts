@@ -1,9 +1,10 @@
 import Router from "@koa/router";
 import * as RT from "runtypes";
 import { validateBody } from "../middleware/validateBody";
-import { AppDataSource } from "../src/data-source";
-import { Task } from "../src/entity/Task";
-import { User } from "../src/entity/User";
+import { AppDataSource } from "../data-source";
+import { Task } from "../entity/Task";
+import { User } from "../entity/User";
+import { Cleanse } from "../Cleanse";
 
 const TaskRepository = AppDataSource.getRepository(Task);
 export const TaskRouter = new Router();
@@ -22,7 +23,7 @@ TaskRouter.post("/create", validateBody(taskValidator), async (ctx) => {
 	await TaskRepository.save(newTask);
 
 	ctx.body = {
-		...cleanseTask(newTask),
+		...Cleanse.task(newTask),
 		author: {
 			uuid: newTask.author.uuid,
 			username: newTask.author.username,
@@ -33,7 +34,7 @@ TaskRouter.post("/create", validateBody(taskValidator), async (ctx) => {
 TaskRouter.get("/authored", async (ctx) => {
 	const tasks = await TaskRepository.findBy({ author: { uuid: ctx.state.user.uuid } });
 	ctx.body = {
-		tasks: tasks.map(cleanseTask),
+		tasks: tasks.map(Cleanse.task),
 	};
 });
 
@@ -47,7 +48,7 @@ TaskRouter.get("/:uuid", async (ctx) => {
 	if (task == null) throw new Error("Was not able to find a task with that name");
 
 	ctx.body = {
-		...cleanseTask(task),
+		...Cleanse.task(task),
 		author: {
 			uuid: task.author.uuid,
 			username: task.author.username,
@@ -77,7 +78,7 @@ TaskRouter.patch("/edit/:uuid", validateBody(editTaskValidator), async (ctx) => 
 
 	await TaskRepository.save(task);
 
-	ctx.body = cleanseTask(task);
+	ctx.body = Cleanse.task(task);
 });
 
 TaskRouter.delete("/delete/:uuid", async (ctx) => {
@@ -91,12 +92,3 @@ TaskRouter.delete("/delete/:uuid", async (ctx) => {
 
 	ctx.body = { success: true };
 });
-
-function cleanseTask(task: Task) {
-	return {
-		uuid: task.uuid,
-		title: task.title,
-		body: task.body,
-		finished: task.finished,
-	};
-}

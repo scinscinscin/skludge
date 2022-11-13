@@ -1,8 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from "typeorm";
 import { v4 } from "uuid";
+import { Division } from "./Division";
 import { Task } from "./Task";
 
-export enum Permissions {
+export enum PERMISSION {
 	NONE = 0,
 	STAFF,
 	EXECUTIVE_HEAD,
@@ -26,15 +27,11 @@ export class User {
 	uuid: string = v4();
 
 	@Column()
-	permissionLevel: number = Permissions.NONE;
+	permissionLevel: number = PERMISSION.NONE;
 
 	@OneToMany(() => Task, (task) => task.author)
 	authoredTasks: Task[];
 
-	cleanse() {
-		return {
-			username: this.username,
-			uuid: this.uuid,
-		};
-	}
+	@ManyToOne(() => Division, (division) => division.members, { nullable: true })
+	division: Division | null;
 }
